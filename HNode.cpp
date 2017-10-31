@@ -12,6 +12,7 @@ HNode::HNode(const char& s, const int& t) {
 // constructor for internal nodes
 HNode::HNode(HNode* l, HNode* r) {
 	
+	//weight is sum of left and right children nodes
 	weight = l->weight + r->weight;
 }
 

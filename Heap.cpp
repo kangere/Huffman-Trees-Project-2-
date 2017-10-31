@@ -1,11 +1,6 @@
 #include "Heap.hpp"
 
-Heap::~Heap()
-{
-	
-}
-
-void Heap::enqueue( HNode* newElement)
+void Heap::enqueue(HNode* newElement)
 {
 	//add a new leaf
 	HNode* temp = nullptr;
@@ -21,6 +16,13 @@ void Heap::enqueue( HNode* newElement)
 	
 	//store new element into the vacant slot
 	tree[index] = newElement;
+	
+	//update position of last item added
+	position = index;
+	
+	//increment count of elements in heap
+	count++;
+	
 
 }
 
@@ -44,5 +46,8 @@ void Heap::fix_down(const int& index)
 
 void Heap::clear()
 {
-
+	if(count < 1)
+		return;
+	else
+		tree.clear();
 }
