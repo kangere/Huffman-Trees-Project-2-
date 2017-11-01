@@ -14,5 +14,9 @@ HNode::HNode(HNode* l, HNode* r) {
 	
 	//weight is sum of left and right children nodes
 	weight = l->weight + r->weight;
+	
+	//assign left and right children
+	left = l;
+	right = r;
 }
 
