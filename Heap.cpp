@@ -46,8 +46,5 @@ void Heap::fix_down(const int& index)
 
 void Heap::clear()
 {
-	if(count < 1)
-		return;
-	else
-		tree.clear();
+	tree.clear();
 }
