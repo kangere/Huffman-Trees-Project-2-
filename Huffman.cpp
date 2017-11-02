@@ -2,6 +2,7 @@
 // c. 2015 A. Deeter
 
 #include "Huffman.hpp"
+#include <string>
 
 // implement this function
 // use a pre-order traversal, keeping track of the path to the current node (0 for left, 1 for right)
@@ -12,7 +13,26 @@
 // add a new <char, std::string> to the codes map with the character and its code for each leaf node
 // using std::make_pair (see create_freq)
 void Huffman::create_codes(HNode* node, const std::string& code) {
-
+		
+		
+		//base case
+		if(node->left == 0 && node->right == 0)
+		{
+			codes.insert(std::pair<char, std::string>(node->value,code));
+			
+		}
+		else if(node->left != 0)
+		{
+			//append 0 for left traversal
+			create_codes(node->left, code + "0");
+		}
+		else if(node->right != 0)
+		{
+			//append 1 for right traversal
+			create_codes(node->right, code + "1");
+		}
+		
+		
 }
 
 // implement this function
@@ -23,7 +43,23 @@ void Huffman::create_codes(HNode* node, const std::string& code) {
 // the characters from each HNode will be used (inner nodes should use '*')
 // there is no return value as s is being edited with each resursive call
 void Huffman::serialize_tree(HNode* node, std::string& s) {
-
+	
+		//base case
+		if(node->left == 0 && node->right == 0)
+		{
+			s.append("/");
+			
+		}
+		else if(node->left != 0)
+		{
+			s += node->value;
+			serialize_tree(node->left, s);
+		}
+		else if(node->right != 0)
+		{
+			s += node->value;
+			serialize_tree(node->right, s);
+		}
 }
 
 // implement this function

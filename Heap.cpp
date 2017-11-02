@@ -2,10 +2,14 @@
 
 void Heap::enqueue(HNode* newElement)
 {
+	//check if vector is empty
+	if(tree.empty())
+	{
+		//add a new leaf
+		HNode* temp = nullptr;
+		tree.push_back(temp);
+	}
 	
-	//add a new leaf
-	HNode* temp = nullptr;
-	tree.push_back(temp);
 	int index = tree.size() - 1;
 
 	//demote parents that are larger than new element
@@ -21,7 +25,7 @@ void Heap::enqueue(HNode* newElement)
 	//update position of last item added
 	position = index;
 	
-	//increment count of elements in heap
+	//increment count of tree in heap
 	count++;
 	
 
@@ -29,29 +33,30 @@ void Heap::enqueue(HNode* newElement)
 
 void  Heap::fix_up(const int& index)
 {
-	 HNode* root = elements[index]; 
-	 int lastIndex = elements.size() - 1;
+	int tempIndex = index;
+	HNode* root = tree[tempIndex]; 
+	int lastIndex = tree.size() - 1;
 	 
-	 // Promote children of removed root while they are larger than last 
-	 //int index = 1; 
-	 boolean more = true;
-	 while (more) 
+	// Promote children of removed root while they are larger than last 
+	//int tempIndex = 1; 
+	bool more = true;
+	while (more) 
 		 {
-			 int childIndex = 2 * index;
+			 int childIndex = 2 * tempIndex;
 			 if (childIndex <= lastIndex) 
 				{ // Get smaller child,  left child first
-				 HNode* child = elements[2 * index];
+				 HNode* child = tree[2 * tempIndex];
 				 // Use right child instead if it is smaller
-				 if ((2 * index + 1 <= lastIndex) && (elements[2 * index + 1] < child)) 
+				 if ((2 * tempIndex + 1 <= lastIndex) && (tree[2 * tempIndex + 1] < child)) 
 					{
-						 childIndex = 2 * index + 1; 
-						 child = elements[2 * index + 1];
+						 childIndex = 2 * tempIndex + 1; 
+						 child = tree[2 * tempIndex + 1];
 					}
 					// Check if larger child is smaller than root; if so promote child
 					if (child < root) 
 					{ 
-						elements[index] = child; 
-						index = childIndex; 
+						tree[tempIndex] = child; 
+						tempIndex = childIndex; 
 					}
 					else 
 					{ 
@@ -67,7 +72,7 @@ void  Heap::fix_up(const int& index)
 						
 		}
 		
-		elements[index] = root;       
+		tree[tempIndex] = root;       
 
 }
 
@@ -78,7 +83,10 @@ HNode* Heap::dequeue()
 	
 	//Remove last element
 	int lastIndex = tree.size() - 1;
-	HNode* last = tree.pop_back();
+	HNode* last = tree.back();
+	
+	//remove last element
+	tree.pop_back();
 	
 	if(lastIndex > 1)
 	{
