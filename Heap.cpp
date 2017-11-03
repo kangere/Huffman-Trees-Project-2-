@@ -90,7 +90,10 @@ HNode* Heap::dequeue()
 	
 	if(lastIndex > 1)
 	{
+		//put last element in root
 		tree[1] = last;
+		
+		//fix heap
 		fix_up(1);
 	}
 	

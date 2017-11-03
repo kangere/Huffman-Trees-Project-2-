@@ -69,7 +69,13 @@ void Huffman::serialize_tree(HNode* node, std::string& s) {
 // if the code for a is 1, the code for b is 01, and the code for c is 00
 // the code for the word 'bad' would be '01100'
 void Huffman::encode_string(const std::string& input, std::string& encoded_string) {
-
+	
+	//loop through string
+	for(int i = 0; i < input.size(); i++)
+	{
+		//append the code for the character in string
+		encoded_string += *(codes.find(input[i]));
+	}
 }
 
 Encoded Huffman::encode(const std::string& s) {
