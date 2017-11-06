@@ -130,10 +130,6 @@ Encoded Huffman::encode(const std::string& s) {
   // the default code is an empty string, as the function recurses the code is added to
   create_codes(huffman_tree, "");
 	
-	//temp logic
-	//display codes map
-	for(auto &p : codes)
-		std::cout << "Char: " << p.first << " Code: " << p.second << std::endl; 
   // serialize the huffman tree
   // store it within ret
   serialize_tree(huffman_tree, ret.serialized_tree);

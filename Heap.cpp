@@ -1,6 +1,9 @@
 #include "Heap.hpp"
 #include <iostream>
-
+/**
+ * @brief function adds element to heap
+ * @param newElement element to be added
+ */
 void Heap::enqueue(HNode* newElement)
 {
 	//if heap is empty
@@ -39,6 +42,11 @@ void Heap::enqueue(HNode* newElement)
 	
 	
 }
+/**
+ * @brief function fixes the heap from the bottom  up
+ * @param index the index to fix the heap from
+ * 
+ */
 
 void  Heap::fix_up(const int& index)
 {
@@ -88,7 +96,10 @@ void  Heap::fix_up(const int& index)
 	
 }
 
-
+/**
+ * @brief function removes element from the heap
+ * @return rthe root element in the heap
+ */
 HNode* Heap::dequeue()
 {
 	HNode* min = tree[1];
@@ -114,7 +125,10 @@ HNode* Heap::dequeue()
 	
 }
 
-
+/**
+ * @brief function fixes the heap from the top down
+ * @param index the index to start fixing from
+ */
 void Heap::fix_down(const int& index)
 {
 	int tempIndex = index;
@@ -160,34 +174,11 @@ void Heap::fix_down(const int& index)
 
 }
 
+/**
+ * @brief functions clears the heap and removes all HNodes
+ */
 void Heap::clear()
 {
 	tree.clear();
 	
-}
-
-//temp fucntions
-void Heap::display()
-{
-	std::cout << "display function starting" <<" size is: " << tree.size() << std::endl;
-	
-	for(auto iter = tree.begin(); iter != tree.end(); ++iter)
-	{
-		if(*iter == 0)
-			continue;
-		std::cout << (*iter)->value << " ";
-	}
-	std::cout << "Count is:" << count<< std::endl ;
-}
-
-void Heap::traversal(HNode* node)
-{
-		//base case
-		if(!node)
-			return;
-			
-		std::cout << node->value << " " << node->weight;
-		traversal(node->left);
-		traversal(node->right);
-		
 }
