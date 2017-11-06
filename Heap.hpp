@@ -32,6 +32,11 @@ public:
   HNode* dequeue();
   // fix the tree after replacing the smallest element
   void fix_down(const int&);
+  
+  //temp function
+  void display();
+  int size()const{return tree.size();}
+  void traversal(HNode*);
 
   void clear();
 };

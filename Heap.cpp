@@ -1,26 +1,34 @@
 #include "Heap.hpp"
+#include <iostream>
 
 void Heap::enqueue(HNode* newElement)
 {
-	//add a new leaf to back
+	//if heap is empty
+	if(tree.size() == 0)
+	{ //resize tree
+		HNode* temp = nullptr;
+		tree.push_back(temp);
+	}
+	
+	//add new leaf
 	HNode* temp = nullptr;
 	tree.push_back(temp);
 	
 	//get index of empty slot
 	int index = tree.size() - 1;
 
-	/*//demote parents that are larger than new element
+	//demote parents that are larger than new element
 	while((index > 1) && (*newElement < *tree[index / 2]))
 	{
 		tree[index] = tree[index / 2];
 		index = index / 2;
-	}*/	
+	}
 	
 	//store new element into the vacant slot
 	tree[index] = newElement;
 	
 	//fix heap
-	fix_up(index);
+	//fix_up(index);
 	
 	
 	//update position of last item added
@@ -29,11 +37,54 @@ void Heap::enqueue(HNode* newElement)
 	//increment count of tree in heap
 	count++;
 	
-
+	
 }
 
 void  Heap::fix_up(const int& index)
 {
+	//if first element skip fix_up
+	if(index <= 1)
+		return;
+		
+		
+	//temp variable
+	int tempIndex = index;
+	
+	bool notFixed = true;
+	
+	//loop through heap
+	while(notFixed)
+	{
+		
+		HNode* child = tree[tempIndex];
+		
+		//check if it's a leaf
+		if((tempIndex % 2) != 0 )
+		{
+			//check if right child is smaller
+			if(tree[tempIndex] < tree[tempIndex - 1])
+			{
+				//swap left child with right child
+				tree[tempIndex] = tree[tempIndex - 1];
+				tree[tempIndex - 1] = child;
+			}
+		}
+		
+		//check if right child is smaller than parent
+		if(child < tree[tempIndex / 2])
+		{
+			//swap child with parent
+			tree[tempIndex] = tree[tempIndex / 2];
+			tree[tempIndex / 2] = child;
+			
+			//change index to parent index
+			tempIndex /= 2;
+		}
+		else
+		{
+			notFixed = false;
+		}
+	}
 	
 }
 
@@ -57,7 +108,8 @@ HNode* Heap::dequeue()
 		//fix heap
 		fix_down(1);
 	}
-	
+	//display();
+	--count;
 	return min;
 	
 }
@@ -111,4 +163,31 @@ void Heap::fix_down(const int& index)
 void Heap::clear()
 {
 	tree.clear();
+	
+}
+
+//temp fucntions
+void Heap::display()
+{
+	std::cout << "display function starting" <<" size is: " << tree.size() << std::endl;
+	
+	for(auto iter = tree.begin(); iter != tree.end(); ++iter)
+	{
+		if(*iter == 0)
+			continue;
+		std::cout << (*iter)->value << " ";
+	}
+	std::cout << "Count is:" << count<< std::endl ;
+}
+
+void Heap::traversal(HNode* node)
+{
+		//base case
+		if(!node)
+			return;
+			
+		std::cout << node->value << " " << node->weight;
+		traversal(node->left);
+		traversal(node->right);
+		
 }

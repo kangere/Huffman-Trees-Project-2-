@@ -3,6 +3,8 @@
 
 #include "Huffman.hpp"
 #include <string>
+#include <ctype.h>
+#include <iostream>
 
 // implement this function
 // use a pre-order traversal, keeping track of the path to the current node (0 for left, 1 for right)
@@ -16,21 +18,18 @@ void Huffman::create_codes(HNode* node, const std::string& code) {
 		
 		
 		//base case
-		if(node->left == 0 && node->right == 0)
+		if(!node->left && !node->right)
 		{
 			codes.insert(std::pair<char, std::string>(node->value,code));
-			
+			return;
 		}
-		else if(node->left != 0)
-		{
-			//append 0 for left traversal
-			create_codes(node->left, code + "0");
-		}
-		else if(node->right != 0)
-		{
-			//append 1 for right traversal
-			create_codes(node->right, code + "1");
-		}
+		
+		//append 0 for left traversal
+		create_codes(node->left, code + "0");
+		
+		//append 1 for right traversal
+		create_codes(node->right, code + "1");
+
 		
 		
 }
@@ -45,19 +44,22 @@ void Huffman::create_codes(HNode* node, const std::string& code) {
 void Huffman::serialize_tree(HNode* node, std::string& s) {
 	
 		//base case
-		if(node->left == 0 && node->right == 0)
+		if(!node->left && !node->right)
 		{
-			s.append("/");
-			
+			s += node->value;
+			s.append("//");
+			return;
 		}
-		else if(node->left != 0)
+		
+		if(node->left)
 		{
 			s += node->value;
 			serialize_tree(node->left, s);
 		}
-		else if(node->right != 0)
+		
+		if(node->right)
 		{
-			s += node->value;
+			
 			serialize_tree(node->right, s);
 		}
 }
@@ -74,16 +76,28 @@ void Huffman::encode_string(const std::string& input, std::string& encoded_strin
 	for(int i = 0; i < input.size(); i++)
 	{
 		//append the code for the character in string
-		encoded_string += *(codes.find(input[i]));
+		encoded_string += (codes.find(input[i]))->second;
 	}
 }
 
 Encoded Huffman::encode(const std::string& s) {
 
+	
+	//change string to lowercase
+	std::string temp;
+	auto iter = s.begin();
+	
+	while( iter != s.end() )
+	{
+		temp += tolower(*iter);
+		iter++;
+	}
+	
+	
   // your heap implementation MUST have a clear function that
   // removes all HNodes from it
   heap.clear();
-
+	
   // clear out the maps
   freq.clear();
   codes.clear();
@@ -92,14 +106,15 @@ Encoded Huffman::encode(const std::string& s) {
   Encoded ret;
 
   // create the frequency map
-  create_freq(s);
-
+  create_freq(temp);
+	
   // create huffman nodes and add them to your heap
   // your heap must have an enqueue function that takes an HNode*
   for(auto iter = freq.begin(); iter != freq.end(); ++iter) {
     heap.enqueue(new HNode(iter->first, iter->second));
   }
-
+	
+	
   // while there are at least two items in the heap
   // create a new node that combines the first and second node into a new node
   // the char should be '*' and the value should be the values of the children added together
@@ -107,24 +122,30 @@ Encoded Huffman::encode(const std::string& s) {
   while (heap.count > 1) {
     heap.enqueue(new HNode(heap.dequeue(), heap.dequeue()));
   }
-
+	
   // store the pointer to the huffman tree
   HNode* huffman_tree = heap.dequeue();
 
   // create the codes for each leaf in the final tree
   // the default code is an empty string, as the function recurses the code is added to
   create_codes(huffman_tree, "");
-
+	
+	//temp logic
+	//display codes map
+	for(auto &p : codes)
+		std::cout << "Char: " << p.first << " Code: " << p.second << std::endl; 
   // serialize the huffman tree
   // store it within ret
   serialize_tree(huffman_tree, ret.serialized_tree);
 
   // encode the original string using the codes map
   // store it within ret
-  encode_string(s, ret.encoded_string);
+  encode_string(temp, ret.encoded_string);
 
   // delete the tree
-  delete huffman_tree;
+	delete huffman_tree;  
+
+  
 
   // return the final Encoded object
   return ret;
